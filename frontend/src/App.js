@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 
 import Home from "./pages/Home";
 import SubmitSituation from "./pages/SubmitSituation";
-import GroupDiscussion from "./pages/GroupDiscussion";
 import Login from "./authentication/Login";
 import Signup from "./authentication/Signup";
 import AnalysisResult from "./pages/AnalysisResult"; // ✅ Already imported
@@ -32,12 +31,6 @@ function App() {
           element={isAuthenticated ? <SubmitSituation /> : <Navigate to="/login" />} 
         />
 
-        <Route 
-          path="/discussion" 
-          element={isAuthenticated ? <GroupDiscussion /> : <Navigate to="/login" />} 
-        />
-
-        {/* ✅ THIS WAS MISSING */}
         <Route 
           path="/analysis" 
           element={isAuthenticated ? <AnalysisResult /> : <Navigate to="/login" />} 
