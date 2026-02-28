@@ -52,38 +52,5 @@
   border-left: 4px solid #999;
   font-size: 14px;
   border-radius: 6px;
-}
-
-.analysis-buttons {
-  margin-top: 30px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.share-btn {
-  background-color: #111;
-  color: white;
-  border: none;
-  padding: 12px 25px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.share-btn:hover {
-  background-color: #333;
-}
-
-.private-btn {
-  background-color: transparent;
-  border: 2px solid #111;
-  padding: 12px 25px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.private-btn:hover {
-  background-color: #111;
-  color: white;
+  text-align: center;
 }

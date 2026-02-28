@@ -6,7 +6,6 @@ function Home() {
   const navigate = useNavigate();
 
   return (
-    
     <div className="dashboard">
       <h1 className="dashboard-title">Welcome to Clarity</h1>
       <p className="dashboard-subtitle">
@@ -22,17 +21,6 @@ function Home() {
           <p>
             Describe your personal situation anonymously and receive
             structured behavioral insights.
-          </p>
-        </div>
-
-        <div
-          className="option-card"
-          onClick={() => navigate("/discussion")}
-        >
-          <h2>Group Discussion</h2>
-          <p>
-            Explore anonymous shared situations and contribute thoughtful
-            peer perspectives.
           </p>
         </div>
       </div>
