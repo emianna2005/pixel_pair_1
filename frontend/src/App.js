@@ -5,35 +5,62 @@ import Home from "./pages/Home";
 import SubmitSituation from "./pages/SubmitSituation";
 import Login from "./authentication/Login";
 import Signup from "./authentication/Signup";
-import AnalysisResult from "./pages/AnalysisResult"; // ✅ Already imported
+import AnalysisResult from "./pages/AnalysisResult";
 
 function App() {
-  const isAuthenticated = !!localStorage.getItem("token");
+
+  // ✅ Reactive authentication state
+  const [token, setToken] = React.useState(
+    localStorage.getItem("token")
+  );
+
+  // ✅ Listen for token changes (login/logout updates UI)
+  React.useEffect(() => {
+    const handleStorageChange = () => {
+      setToken(localStorage.getItem("token"));
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
+  const isAuthenticated = token && token !== "undefined";
 
   return (
     <Router>
       <Routes>
 
         {/* Default route */}
-        <Route 
-          path="/" 
-          element={isAuthenticated ? <Home /> : <Navigate to="/login" />} 
+        <Route
+          path="/"
+          element={
+            isAuthenticated ? <Home /> : <Navigate to="/login" />
+          }
         />
 
         {/* Protected routes */}
-        <Route 
-          path="/home" 
-          element={isAuthenticated ? <Home /> : <Navigate to="/login" />} 
+        <Route
+          path="/home"
+          element={
+            isAuthenticated ? <Home /> : <Navigate to="/login" />
+          }
         />
 
-        <Route 
-          path="/submit" 
-          element={isAuthenticated ? <SubmitSituation /> : <Navigate to="/login" />} 
+        <Route
+          path="/submit"
+          element={
+            isAuthenticated ? <SubmitSituation /> : <Navigate to="/login" />
+          }
         />
 
-        <Route 
-          path="/analysis" 
-          element={isAuthenticated ? <AnalysisResult /> : <Navigate to="/login" />} 
+        <Route
+          path="/analysis"
+          element={
+            isAuthenticated ? <AnalysisResult /> : <Navigate to="/login" />
+          }
         />
 
         {/* Public routes */}
@@ -45,9 +72,12 @@ function App() {
   );
 }
 
-// LoginWrapper allows switching to Signup
+/* =========================
+   LOGIN WRAPPER
+========================= */
 function LoginWrapper() {
   const [showSignup, setShowSignup] = React.useState(false);
+
   return showSignup ? (
     <Signup switchToLogin={() => setShowSignup(false)} />
   ) : (
@@ -55,9 +85,12 @@ function LoginWrapper() {
   );
 }
 
-// SignupWrapper allows switching to Login
+/* =========================
+   SIGNUP WRAPPER
+========================= */
 function SignupWrapper() {
   const [showLogin, setShowLogin] = React.useState(false);
+
   return showLogin ? (
     <Login switchToSignup={() => setShowLogin(false)} />
   ) : (
