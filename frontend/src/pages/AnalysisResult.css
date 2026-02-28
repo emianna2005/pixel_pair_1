@@ -1,0 +1,89 @@
+.analysis-container {
+  max-width: 700px;
+  margin: 60px auto;
+  padding: 40px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+}
+
+.analysis-title {
+  text-align: center;
+  font-size: 36px;
+  margin-bottom: 30px;
+}
+
+/* Classification colors */
+.classification {
+  text-align: center;
+  font-weight: bold;
+  padding: 14px;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  font-size: 18px;
+}
+
+.concerning {
+  background-color: #ffe5e5;
+  color: #c0392b;
+}
+
+.clarification {
+  background-color: #fff4e5;
+  color: #d68910;
+}
+
+.healthy {
+  background-color: #e8f8f5;
+  color: #1e8449;
+}
+
+.analysis-explanation p {
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.disclaimer {
+  margin-top: 25px;
+  padding: 15px;
+  background-color: #f4f4f4;
+  border-left: 4px solid #999;
+  font-size: 14px;
+  border-radius: 6px;
+}
+
+.analysis-buttons {
+  margin-top: 30px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.share-btn {
+  background-color: #111;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.share-btn:hover {
+  background-color: #333;
+}
+
+.private-btn {
+  background-color: transparent;
+  border: 2px solid #111;
+  padding: 12px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.private-btn:hover {
+  background-color: #111;
+  color: white;
+}
