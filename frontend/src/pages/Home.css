@@ -32,6 +32,7 @@ body {
   margin: 0;
   color: #111;
 }
+
 /* Gradient Background */
 .dashboard {
   height: 100vh;
@@ -67,6 +68,7 @@ body {
 .options-container {
   display: flex;
   gap: 40px;
+  justify-content: center; /* Center the single card */
 }
 
 .option-card {
