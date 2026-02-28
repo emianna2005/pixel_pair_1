@@ -4,6 +4,18 @@ import Situation from "../models/Situation.js";
 
 const router = express.Router();
 
+// GET a single situation by its MongoDB _id
+router.get("/:id", async (req, res) => {
+  try {
+    const situation = await Situation.findById(req.params.id);
+    if (!situation) return res.status(404).json({ error: "Situation not found" });
+    res.status(200).json({ data: situation });
+  } catch (error) {
+    console.error("Get situation by ID error:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 // POST /api/situations
 router.post("/", async (req, res) => {
   try {

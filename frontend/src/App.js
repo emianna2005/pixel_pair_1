@@ -1,27 +1,58 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
 import Home from "./pages/Home";
 import SubmitSituation from "./pages/SubmitSituation";
 import GroupDiscussion from "./pages/GroupDiscussion";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
+import Login from "./authentication/Login";
+import Signup from "./authentication/Signup";
+import AnalysisResult from "./pages/AnalysisResult"; // ✅ Already imported
 
 function App() {
+  const isAuthenticated = !!localStorage.getItem("token");
+
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/submit" element={<SubmitSituation />} />
-        <Route path="/discussion" element={<GroupDiscussion />} />
+
+        {/* Default route */}
+        <Route 
+          path="/" 
+          element={isAuthenticated ? <Home /> : <Navigate to="/login" />} 
+        />
+
+        {/* Protected routes */}
+        <Route 
+          path="/home" 
+          element={isAuthenticated ? <Home /> : <Navigate to="/login" />} 
+        />
+
+        <Route 
+          path="/submit" 
+          element={isAuthenticated ? <SubmitSituation /> : <Navigate to="/login" />} 
+        />
+
+        <Route 
+          path="/discussion" 
+          element={isAuthenticated ? <GroupDiscussion /> : <Navigate to="/login" />} 
+        />
+
+        {/* ✅ THIS WAS MISSING */}
+        <Route 
+          path="/analysis" 
+          element={isAuthenticated ? <AnalysisResult /> : <Navigate to="/login" />} 
+        />
+
+        {/* Public routes */}
         <Route path="/login" element={<LoginWrapper />} />
         <Route path="/signup" element={<SignupWrapper />} />
+
       </Routes>
     </Router>
   );
 }
 
-// Wrappers to handle switching between login and signup
+// LoginWrapper allows switching to Signup
 function LoginWrapper() {
   const [showSignup, setShowSignup] = React.useState(false);
   return showSignup ? (
@@ -31,6 +62,7 @@ function LoginWrapper() {
   );
 }
 
+// SignupWrapper allows switching to Login
 function SignupWrapper() {
   const [showLogin, setShowLogin] = React.useState(false);
   return showLogin ? (

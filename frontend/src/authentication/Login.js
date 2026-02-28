@@ -8,18 +8,25 @@ export default function Login({ switchToSignup }) {
 
   const handleLogin = async () => {
     setError("");
+
     if (!username || !password) {
       setError("Please fill in all fields");
       return;
     }
 
     try {
-      await axios.post("http://localhost:5000/api/auth/login", {
-        username,
-        password
-      });
-      alert("Login successful");
-      // Later: redirect to home page
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/login",
+        { username, password }
+      );
+
+      // ✅ Save login flag
+      localStorage.setItem("token", "loggedin");
+      localStorage.setItem("username", response.data.username);
+
+      // ✅ Force reload so App.js re-checks token
+      window.location.href = "/home";
+
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
     }
@@ -28,7 +35,6 @@ export default function Login({ switchToSignup }) {
   return (
     <div style={styles.page}>
       <div style={styles.card}>
-        {/* LOGO */}
         <h1 style={styles.logo}>CLARITY</h1>
         <p style={styles.tagline}>Reflect. Understand. Decide.</p>
 
@@ -66,7 +72,7 @@ export default function Login({ switchToSignup }) {
   );
 }
 
-/* 🎨 SAME STYLES AS SIGNUP */
+/* 🎨 STYLES */
 const styles = {
   page: {
     height: "100vh",

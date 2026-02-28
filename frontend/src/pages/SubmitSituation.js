@@ -1,7 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./SubmitSituation.css";
 
 function SubmitSituation() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     description: "",
     category: "",
@@ -18,10 +22,29 @@ function SubmitSituation() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitted Data:", formData);
-    alert("Analyzing situation...");
+
+    try {
+      console.log("Submitting:", formData);
+
+      // ✅ Send data to backend
+      const response = await axios.post(
+        "http://localhost:5000/api/situations",
+        formData
+      );
+
+      console.log("Response:", response.data);
+
+      // ✅ Navigate to Analysis page
+      navigate("/analysis", {
+        state: { result: response.data },
+      });
+
+    } catch (error) {
+      console.error("Error submitting situation:", error);
+      alert("Something went wrong!");
+    }
   };
 
   return (
@@ -32,8 +55,7 @@ function SubmitSituation() {
       </p>
 
       <form className="submit-form" onSubmit={handleSubmit}>
-        
-        {/* Situation Description */}
+
         <label>Situation Description</label>
         <textarea
           name="description"
@@ -43,7 +65,6 @@ function SubmitSituation() {
           required
         />
 
-        {/* Category Dropdown */}
         <label>Category</label>
         <select
           name="category"
@@ -58,7 +79,6 @@ function SubmitSituation() {
           <option value="Other">Other</option>
         </select>
 
-        {/* Checkboxes */}
         <div className="checkbox-group">
           <label>
             <input
@@ -91,10 +111,10 @@ function SubmitSituation() {
           </label>
         </div>
 
-        {/* Submit Button */}
         <button type="submit" className="analyze-btn">
           Analyze Situation
         </button>
+
       </form>
     </div>
   );
