@@ -16,6 +16,7 @@ router.post("/", async (req, res) => {
       confused
     } = req.body;
 
+    // ✅ Validation
     if (!description || !category) {
       return res.status(400).json({
         error: "Description and category are required."
@@ -24,14 +25,17 @@ router.post("/", async (req, res) => {
 
     const text = description.toLowerCase();
 
-    let classification = "healthy";
-    let explanation = "This appears to be a healthy interaction.";
+    /* ======================================
+       SCORING SYSTEM
+    ====================================== */
     let score = 0;
 
-    if (repeated === true) score += 2;
-    if (powerImbalance === true) score += 2;
-    if (confused === true) score += 1;
+    // ✅ Boolean scoring (safe truthy check)
+    if (repeated) score += 2;
+    if (powerImbalance) score += 2;
+    if (confused) score += 1;
 
+    // ✅ Improved keyword detection using regex
     const concerningKeywords = [
       "insult",
       "control",
@@ -40,53 +44,72 @@ router.post("/", async (req, res) => {
       "threat",
       "humiliate",
       "gaslight",
-      "ignore repeatedly"
+      "ignore"
     ];
 
-    concerningKeywords.forEach(word => {
-      if (text.includes(word)) {
+    concerningKeywords.forEach((word) => {
+      const regex = new RegExp(word, "i");
+      if (regex.test(text)) {
         score += 2;
       }
     });
+    console.log("Text:", text);
+console.log("Score:", score);
+console.log("Repeated:", repeated);
+console.log("PowerImbalance:", powerImbalance);
+console.log("Confused:", confused);
+
+    /* ======================================
+       CLASSIFICATION LOGIC
+    ====================================== */
+    let classification = "healthy";
+    let explanation = "Based on the information provided, this appears healthy.";
+
 
     if (score >= 4) {
       classification = "concerning";
       explanation =
-        "There are multiple indicators of unhealthy or harmful patterns.";
+        "There are multiple indicators of unhealthy or harmful interaction patterns.";
     } 
     else if (score >= 2) {
       classification = "clarification";
       explanation =
-        "Some aspects may require further clarification.";
-    } 
-    else {
-      classification = "healthy";
-      explanation =
-        "Based on the information provided, this appears healthy.";
+        "Some aspects may require further clarification or discussion.";
     }
+    console.log("Final Classification:", classification);
 
+    /* ======================================
+       SAVE TO DATABASE
+    ====================================== */
     const newSituation = new Situation({
       description,
       category,
-      repeatedBehavior: repeated || false,
-      powerImbalance: powerImbalance || false,
-      feltConfusedOrDismissed: confused || false,
+      repeatedBehavior: !!repeated,
+      powerImbalance: !!powerImbalance,
+      feltConfusedOrDismissed: !!confused,
       classification,
       explanation
     });
 
     const savedSituation = await newSituation.save();
 
-    res.status(201).json({
+    /* ======================================
+       RESPONSE
+    ====================================== */
+    return res.status(201).json({
+      success: true,
+      score,
       classification,
       explanation,
-      score,
       data: savedSituation
     });
 
   } catch (error) {
-    console.error("Situation error:", error);
-    res.status(500).json({ error: "Server error" });
+    console.error("❌ Situation Error:", error);
+    return res.status(500).json({
+      success: false,
+      error: "Server error"
+    });
   }
 });
 

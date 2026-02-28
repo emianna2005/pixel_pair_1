@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
+import { useLocation } from "react-router-dom";
 import "./AnalysisResult.css";
 
-function AnalysisResult({ result }) {
-  // Example: result = { classification: "concerning", explanation: "Some text here" }
-  const [classification] = useState(result?.classification || "concerning");
-  const [explanation] = useState(
+function AnalysisResult() {
+
+  const location = useLocation();
+  const result = location.state?.result;
+
+  const classification = result?.classification || "healthy";
+  const explanation =
     result?.explanation ||
-      "Based on the details you shared, this situation may indicate a repeated pattern of dismissive behavior."
-  );
+    "No analysis data found.";
 
   return (
     <div className="analysis-container">
