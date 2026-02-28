@@ -4,6 +4,16 @@ import Situation from "../models/Situation.js";
 
 const router = express.Router();
 
+router.get("/user/:userId", async (req, res) => {
+  try {
+    const situations = await Situation.find({ userId: req.params.userId });
+    res.status(200).json({ data: situations });
+  } catch (error) {
+    console.error("Get user situations error:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
 // POST /api/situations
 router.post("/", async (req, res) => {
   try {
